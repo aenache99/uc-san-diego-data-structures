@@ -1,30 +1,21 @@
-# python3
+def is_balanced(text):
+    stack = []
+    brackets = {'(': ')', '[': ']', '{': '}'}
 
-from collections import namedtuple
+    for i, char in enumerate(text):
+        if char in brackets.keys():
+            stack.append((char, i))  # Store both the bracket and its position.
+        elif char in brackets.values():
+            if not stack or brackets[stack.pop()[0]] != char:
+                return i + 1
 
-Bracket = namedtuple("Bracket", ["char", "position"])
-
-
-def are_matching(left, right):
-    return (left + right) in ["()", "[]", "{}"]
-
-
-def find_mismatch(text):
-    opening_brackets_stack = []
-    for i, next in enumerate(text):
-        if next in "([{":
-            # Process opening bracket, write your code here
-            pass
-
-        if next in ")]}":
-            # Process closing bracket, write your code here
-            pass
+    return stack[0][1] + 1 if stack else "Success"
 
 
 def main():
     text = input()
-    mismatch = find_mismatch(text)
-    # Printing answer, write your code here
+    mismatch = is_balanced(text)
+    print(mismatch)
 
 
 if __name__ == "__main__":

@@ -1,29 +1,36 @@
-# python3
+class TreeNode:
+    def __init__(self):
+        self.children = []
 
-import sys, threading
-sys.setrecursionlimit(10**7) # max depth of recursion
-threading.stack_size(2**27)  # new thread will get stack of such size
 
-class TreeHeight:
-        def read(self):
-                self.n = int(sys.stdin.readline())
-                self.parent = list(map(int, sys.stdin.readline().split()))
+def compute_tree_height(parents):
+    n = len(parents)
+    nodes = [TreeNode() for _ in range(n)]
+    root = None
 
-        def compute_height(self):
-                # Replace this code with a faster implementation
-                maxHeight = 0
-                for vertex in range(self.n):
-                        height = 0
-                        i = vertex
-                        while i != -1:
-                                height += 1
-                                i = self.parent[i]
-                        maxHeight = max(maxHeight, height);
-                return maxHeight;
+    # Build the tree structure
+    for child_index, parent_index in enumerate(parents):
+        if parent_index == -1:
+            root = nodes[child_index]
+        else:
+            nodes[parent_index].children.append(nodes[child_index])
 
-def main():
-  tree = TreeHeight()
-  tree.read()
-  print(tree.compute_height())
+    stack = [(root, 1)]  # Using a stack for iterative traversal, along with the depth
 
-threading.Thread(target=main).start()
+    max_height = 0
+
+    while stack:
+        node, depth = stack.pop()
+        max_height = max(max_height, depth)
+
+        for child in node.children:
+            stack.append((child, depth + 1))
+
+    return max_height
+
+
+if __name__ == '__main__':
+    n = int(input())
+    parents = list(map(int, input().split()))
+    tree_height = compute_tree_height(parents)
+    print(tree_height)
